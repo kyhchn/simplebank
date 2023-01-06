@@ -69,7 +69,7 @@ func (q *Queries) GetAccount(ctx context.Context, id int64) (Account, error) {
 
 const listAccount = `-- name: ListAccount :many
 SELECT id, owner, balance, currency, created_at FROM accounts
-ORDER BY name LIMIT $1 OFFSET $2
+ORDER BY id LIMIT $1 OFFSET $2
 `
 
 type ListAccountParams struct {
