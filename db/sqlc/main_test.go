@@ -10,12 +10,14 @@ import (
 )
 
 var testQuery *Queries
+var testDB *sql.DB
 
 func TestMain(m *testing.M) {
-	conn, err := sql.Open("postgres", "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable")
+	var err error
+	testDB, err = sql.Open("postgres", "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable")
 	if err != nil {
 		log.Fatal("failed to connected to db", err)
 	}
-	testQuery = New(conn)
+	testQuery = New(testDB)
 	os.Exit(m.Run())
 }
