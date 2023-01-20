@@ -88,11 +88,13 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParam) (Transf
 		}
 		//get each account and run update query
 		if arg.FromAccountID > arg.ToAccountID {
-			transferMoney(ctx, q, arg.FromAccountID, arg.ToAccountID, arg.Amount)
+			result.FromAccount, result.ToAccount, err = transferMoney(ctx, q, arg.FromAccountID, arg.ToAccountID, arg.Amount)
 		} else {
-			transferMoney(ctx, q, arg.ToAccountID, arg.FromAccountID, -arg.Amount)
+			result.ToAccount, result.FromAccount, err = transferMoney(ctx, q, arg.ToAccountID, arg.FromAccountID, -arg.Amount)
 		}
-
+		if err != nil {
+			return err
+		}
 		return nil
 	})
 	return result, err
