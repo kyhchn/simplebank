@@ -11,10 +11,10 @@ type Store struct {
 	db *sql.DB
 }
 
-func NewStore(db sql.DB) *Store {
+func NewStore(db *sql.DB) *Store {
 	return &Store{
-		db:      &db,
-		Queries: New(&db),
+		db:      db,
+		Queries: New(db),
 	}
 }
 
@@ -82,7 +82,7 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParam) (Transf
 			return err
 		}
 		//get each account and run update query
-		if arg.FromAccountID > arg.ToAccountID {
+		if arg.FromAccountID < arg.ToAccountID {
 			result.FromAccount, result.ToAccount, err = transferMoney(ctx, q, arg.FromAccountID, arg.ToAccountID, arg.Amount)
 		} else {
 			result.ToAccount, result.FromAccount, err = transferMoney(ctx, q, arg.ToAccountID, arg.FromAccountID, -arg.Amount)

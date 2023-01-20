@@ -9,7 +9,7 @@ import (
 )
 
 func TestTransferTx(t *testing.T) {
-	store := NewStore(*testDB)
+	store := NewStore(testDB)
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
@@ -107,7 +107,7 @@ func TestTransferTx(t *testing.T) {
 }
 
 func TestTransferTwoWay(t *testing.T) {
-	store := NewStore(*testDB)
+	store := NewStore(testDB)
 
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
@@ -123,7 +123,7 @@ func TestTransferTwoWay(t *testing.T) {
 			ToAccountID:   account2.ID,
 			Amount:        amount,
 		}
-		if i%2 == 0 {
+		if i%2 != 0 {
 			arg.FromAccountID = account2.ID
 			arg.ToAccountID = account1.ID
 		}
