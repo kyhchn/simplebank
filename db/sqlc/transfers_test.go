@@ -27,7 +27,8 @@ func createRandomTransfer(t *testing.T) Transfer {
 	return transfer
 }
 func TestCreateTransfer(t *testing.T) {
-	createRandomTransfer(t)
+	account := createRandomTransfer(t)
+	require.NotEmpty(t, account)
 }
 
 func TestGetTransfer(t *testing.T) {
