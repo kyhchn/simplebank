@@ -49,16 +49,12 @@ type TransferTxResult struct {
 	ToEntry     Entry    `json:"to_entry"`
 }
 
-var txKey = struct{}{}
-
 // function to exexute transafer transaction containing create transfer, entry for 2 account, and edit each account
 func (store *Store) TransferTx(ctx context.Context, arg TransferTxParam) (TransferTxResult, error) {
 	var result TransferTxResult
 	err := store.execTx(ctx, func(q *Queries) error {
 		var err error
 
-		txName := ctx.Value(txKey)
-		fmt.Println(txName, "create transfer")
 		result.Transfer, err = q.CreateTransfer(ctx, CreateTransferParams{
 			FromAccountID: arg.FromAccountID,
 			ToAccountID:   arg.ToAccountID,
@@ -68,7 +64,6 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParam) (Transf
 			return err
 		}
 
-		fmt.Println(txName, "create entry1")
 		result.ToEntry, err = q.CreateEntry(ctx, CreateEntryParams{
 			AccountID: arg.ToAccountID,
 			Amount:    arg.Amount,
@@ -77,7 +72,7 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParam) (Transf
 		if err != nil {
 			return err
 		}
-		fmt.Println(txName, "create entry2")
+
 		result.FromEntry, err = q.CreateEntry(ctx, CreateEntryParams{
 			AccountID: arg.FromAccountID,
 			Amount:    -arg.Amount,
