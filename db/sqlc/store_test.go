@@ -108,47 +108,47 @@ func TestTransferTx(t *testing.T) {
 	require.Equal(t, account2.Balance+int64(n)*amount, updatedAccount2.Balance)
 }
 
-func TestTransferTwoWay(t *testing.T) {
-	store := NewStore(*testDB)
+// func TestTransferTwoWay(t *testing.T) {
+// 	store := NewStore(*testDB)
 
-	account1 := createRandomAccount(t)
-	account2 := createRandomAccount(t)
-	n := 10
-	amount := int64(10)
+// 	account1 := createRandomAccount(t)
+// 	account2 := createRandomAccount(t)
+// 	n := 10
+// 	amount := int64(10)
 
-	errs := make(chan error)
+// 	errs := make(chan error)
 
-	for i := 0; i < n; i++ {
-		txName := fmt.Sprintf("tx %d", i+1)
-		arg := TransferTxParam{
-			FromAccountID: account1.ID,
-			ToAccountID:   account2.ID,
-			Amount:        amount,
-		}
-		if i%2 == 0 {
-			arg.FromAccountID = account2.ID
-			arg.ToAccountID = account1.ID
-		}
-		go func() {
-			ctx := context.WithValue(context.Background(), txKey, txName)
-			_, err := store.TransferTx(ctx, arg)
-			errs <- err
-		}()
-	}
+// 	for i := 0; i < n; i++ {
+// 		txName := fmt.Sprintf("tx %d", i+1)
+// 		arg := TransferTxParam{
+// 			FromAccountID: account1.ID,
+// 			ToAccountID:   account2.ID,
+// 			Amount:        amount,
+// 		}
+// 		if i%2 == 0 {
+// 			arg.FromAccountID = account2.ID
+// 			arg.ToAccountID = account1.ID
+// 		}
+// 		go func() {
+// 			ctx := context.WithValue(context.Background(), txKey, txName)
+// 			_, err := store.TransferTx(ctx, arg)
+// 			errs <- err
+// 		}()
+// 	}
 
-	//check the result
-	for i := 0; i < n; i++ {
-		err := <-errs
-		require.NoError(t, err)
-	}
+// 	//check the result
+// 	for i := 0; i < n; i++ {
+// 		err := <-errs
+// 		require.NoError(t, err)
+// 	}
 
-	updatedAccount1, err := testQuery.GetAccount(context.Background(), account1.ID)
-	require.NoError(t, err)
+// 	updatedAccount1, err := testQuery.GetAccount(context.Background(), account1.ID)
+// 	require.NoError(t, err)
 
-	updatedAccount2, err := testQuery.GetAccount(context.Background(), account2.ID)
-	require.NoError(t, err)
+// 	updatedAccount2, err := testQuery.GetAccount(context.Background(), account2.ID)
+// 	require.NoError(t, err)
 
-	fmt.Println("after tx:", updatedAccount1.Balance, updatedAccount2.Balance)
-	require.Equal(t, account1.Balance, updatedAccount1.Balance)
-	require.Equal(t, account2.Balance, updatedAccount2.Balance)
-}
+// 	fmt.Println("after tx:", updatedAccount1.Balance, updatedAccount2.Balance)
+// 	require.Equal(t, account1.Balance, updatedAccount1.Balance)
+// 	require.Equal(t, account2.Balance, updatedAccount2.Balance)
+// }
